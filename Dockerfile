@@ -28,6 +28,7 @@ FROM python:3.14-slim AS python-build
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     UV_PROJECT_ENVIRONMENT=/opt/venv \
+    UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy
 
 WORKDIR /app
@@ -77,7 +78,11 @@ COPY --chown=app:app --from=frontend-build /app/app/static app/static
 
 # The runtime image copies source files instead of installing the project, so
 # recreate the console-script entry point that pyproject would normally install.
-RUN chmod +x /app/scripts/docker-entrypoint.sh \
+# The base image ships without stdlib bytecode and PYTHONDONTWRITEBYTECODE stops
+# runtime caching, so precompile to keep cold starts inside platform readiness
+# deadlines (e.g. Nitroship's 30 s). The venv is compiled by UV_COMPILE_BYTECODE.
+RUN python -m compileall -q -j0 "$(python -c 'import sysconfig; print(sysconfig.get_path("stdlib"))')" /app/app \
+    && chmod +x /app/scripts/docker-entrypoint.sh \
     && chmod +x /usr/local/bin/codex-lb-native-egress \
     && printf '%s\n' '#!/bin/sh' 'exec python -m app.cli "$@"' > /usr/local/bin/codex-lb \
     && chmod +x /usr/local/bin/codex-lb
