@@ -37,6 +37,9 @@ ChatGPT 账户负载均衡器。聚合多个账户、追踪用量、管理 API K
 |:---:|:---:|
 
 ## 快速开始
+[![Deploy on Nitroship](https://nitroship.co/button.svg)](https://nitroship.co/deploy?repo=Soju06/codex-lb&ref=main)
+
+Nitroship 部署需要外部 PostgreSQL 数据库。
 
 ```bash
 # Docker（推荐）

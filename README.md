@@ -35,6 +35,9 @@ Load balancer for ChatGPT accounts. Pool multiple accounts, track usage, manage 
 |:---:|:---:|
 
 ## Quick Start
+[![Deploy on Nitroship](https://nitroship.co/button.svg)](https://nitroship.co/deploy?repo=Soju06/codex-lb&ref=main)
+
+Nitroship deployments require an external PostgreSQL database.
 
 ```bash
 # Docker (recommended)

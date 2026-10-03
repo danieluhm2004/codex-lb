@@ -1,0 +1,18 @@
+{
+  "compute": {
+    "regions": ["kr-icn"],
+    "minInstances": 1,
+    "maxInstances": 1,
+    "port": 2455,
+    "healthPath": "/health/ready"
+  },
+  "template": {
+    "name": "codex-lb",
+    "description": "Codex/ChatGPT account load balancer and proxy with a usage dashboard",
+    "env": [
+      { "key": "CODEX_LB_DATABASE_URL", "required": true, "secret": true, "description": "External PostgreSQL URL, e.g. postgresql+asyncpg://user:password@host:5432/codex_lb" },
+      { "key": "CODEX_LB_ENCRYPTION_KEY", "type": "string", "generated": true, "required": true, "secret": true, "description": "Fernet key for stored account tokens. Keep it stable; changing it makes stored tokens unreadable." },
+      { "key": "CODEX_LB_DASHBOARD_BOOTSTRAP_TOKEN", "type": "string", "generated": true, "required": true, "secret": false, "description": "One-time token for setting the dashboard password on first login. Copy it now; Nitroship does not show application logs." }
+    ]
+  }
+}
